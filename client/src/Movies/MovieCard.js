@@ -1,11 +1,26 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import axios from "axios";
 
 const MovieCard = props => {
+
   const { title, director, metascore, stars } = props.movie;
 
   const updateMovie = () => {
+    console.log('update movie callback');
     props.history.push(`/update-movie/${props.movie.id}`);
+  };
+
+  const deleteMovie = (e) => {
+    e.preventDefault();
+    axios.delete(`http://192.168.1.211:5000/api/movies/${props.movie.id}`)
+      .then((res) => {
+        props.setMovieList(props.movieList.filter(tempMovie => {
+          return tempMovie.id !== props.movie.id;
+        }));
+        props.history.push('/');
+      })
+      .catch((err) => console.log(err.response));
   };
 
   return (
@@ -26,6 +41,9 @@ const MovieCard = props => {
       ))}
       <button className="update-button" onClick={updateMovie}>
         Update
+      </button>
+      <button className="delete-button" onClick={deleteMovie}>
+        Delete
       </button>
     </div>
   );
