@@ -6,13 +6,17 @@ const MovieCard = props => {
 
   const { title, director, metascore, stars } = props.movie;
 
-  const updateMovie = () => {
+  const updateMovie = (e) => {
+    // Why do I need this and why do I only need it in the list view?
+    e.preventDefault();
+    // Why does this not work...
+    //e.stopPropagation();
     console.log('update movie callback');
     props.history.push(`/update-movie/${props.movie.id}`);
   };
 
   const deleteMovie = (e) => {
-    e.preventDefault();
+    //e.preventDefault();
     axios.delete(`http://192.168.1.211:5000/api/movies/${props.movie.id}`)
       .then((res) => {
         props.setMovieList(props.movieList.filter(tempMovie => {
@@ -39,10 +43,10 @@ const MovieCard = props => {
           {star}
         </div>
       ))}
-      <button className="update-button" onClick={updateMovie}>
+      <button type='button' className="update-button" onClick={updateMovie}>
         Update
       </button>
-      <button className="delete-button" onClick={deleteMovie}>
+      <button type='button' className="delete-button" onClick={deleteMovie}>
         Delete
       </button>
     </div>
